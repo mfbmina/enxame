@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/mfbmina/enxame/lib"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +29,7 @@ func runCmd() *cobra.Command {
 		Short: "Run a test",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("run called")
+			lib.Service(args[0])
 		},
 	}
 }
