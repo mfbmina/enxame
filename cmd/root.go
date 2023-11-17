@@ -5,7 +5,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
+var requestsPerUser int
+var users int
+
 var rootCmd = &cobra.Command{
 	Use:   "enxame",
 	Short: "A http load tester and benchmarking utility made in Go",
@@ -19,8 +21,10 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize()
 
-	// add new commands here
-	rootCmd.AddCommand(runCmd())
+	runCmd := runCmd()
+	runCmd.Flags().IntVarP(&requestsPerUser, "requests_per_user", "r", 5, "Max number of requests per user")
+	runCmd.Flags().IntVarP(&users, "users", "u", 10, "Max number of concurrent users")
+	rootCmd.AddCommand(runCmd)
 }
 
 func runCmd() *cobra.Command {
@@ -29,7 +33,7 @@ func runCmd() *cobra.Command {
 		Short: "Run a test",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			lib.Service(args[0])
+			lib.Swarm(args[0], requestsPerUser, users)
 		},
 	}
 }
