@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/mfbmina/enxame/lib"
 	"github.com/spf13/cobra"
 )
@@ -33,7 +35,13 @@ func runCmd() *cobra.Command {
 		Short: "Run a test",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
-			lib.Swarm(args[0], requestsPerUser, users)
+			fmt.Println("Swarming", args[0], "...")
+
+			for _, r := range lib.Swarm(args[0], requestsPerUser, users) {
+				fmt.Println(r.StatusCode, r.Time, r.Path)
+			}
+
+			fmt.Println("Done!")
 		},
 	}
 }
