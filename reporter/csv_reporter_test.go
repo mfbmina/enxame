@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mfbmina/enxame/lib/swarm"
+	"github.com/mfbmina/enxame/swarm"
 	"github.com/stretchr/testify/assert"
 )
 

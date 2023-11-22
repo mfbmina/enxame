@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/mfbmina/enxame/lib/reporter"
-	"github.com/mfbmina/enxame/lib/swarm"
+	"github.com/mfbmina/enxame/reporter"
+	"github.com/mfbmina/enxame/swarm"
 	"github.com/spf13/cobra"
 )
 

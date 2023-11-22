@@ -3,7 +3,7 @@ package reporter
 import (
 	"fmt"
 
-	"github.com/mfbmina/enxame/lib/swarm"
+	"github.com/mfbmina/enxame/swarm"
 )
 
 type CsvReport struct {
