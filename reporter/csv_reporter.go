@@ -6,11 +6,11 @@ import (
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type CsvReport struct {
+type CSVReport struct {
 	Responses []swarm.HTTPResponse
 }
 
-func (r CsvReport) Report() {
+func (r CSVReport) Report() {
 	fmt.Println("Reporting results as csv...")
 	fmt.Println("-----------------------------")
 	fmt.Println("status_code,time,path")

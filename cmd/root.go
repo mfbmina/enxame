@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var format string
 var requestsPerUser int
 var users int
 
@@ -27,6 +28,7 @@ func init() {
 	runCmd := runCmd()
 	runCmd.Flags().IntVarP(&requestsPerUser, "requests_per_user", "r", 5, "Max number of requests per user")
 	runCmd.Flags().IntVarP(&users, "users", "u", 10, "Max number of concurrent users")
+	runCmd.Flags().StringVarP(&format, "format", "f", "txt", "The report format (txt, csv, json)")
 	rootCmd.AddCommand(runCmd)
 }
 
@@ -39,15 +41,8 @@ func runCmd() *cobra.Command {
 			fmt.Println("Swarming", args[0], "...")
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
-			// I still need to figure out how to instanciate the correct reporter based on the flag
-			TXTReport := reporter.TXTReport{Responses: responses}
-			TXTReport.Report()
-
-			csvReport := reporter.CsvReport{Responses: responses}
-			csvReport.Report()
-
-			jReport := reporter.JSONReport{Responses: responses}
-			jReport.Report()
+			r := reporter.NewReporter(format, responses)
+			r.Report()
 
 			fmt.Println("Done!")
 		},
