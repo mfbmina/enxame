@@ -8,13 +8,13 @@ import (
 )
 
 type JSONReport struct {
-	Results []swarm.HTTPResponse `json:"results"`
+	Responses []swarm.HTTPResponse `json:"results"`
 }
 
-func (cR JSONReport) Report() {
+func (r JSONReport) Report() {
 	fmt.Println("Reporting results as JSON...")
 	fmt.Println("-----------------------------")
-	j, err := json.Marshal(cR.Results)
+	j, err := json.Marshal(r.Responses)
 	if err != nil {
 		fmt.Println(err)
 		return

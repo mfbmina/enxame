@@ -10,11 +10,11 @@ type CsvReport struct {
 	Responses []swarm.HTTPResponse
 }
 
-func (cR CsvReport) Report() {
+func (r CsvReport) Report() {
 	fmt.Println("Reporting results as csv...")
 	fmt.Println("-----------------------------")
 	fmt.Println("status_code,time,path")
-	for _, r := range cR.Responses {
+	for _, r := range r.Responses {
 		fmt.Printf("%d,%s,%s\n", r.StatusCode, r.Time, r.Path)
 	}
 }

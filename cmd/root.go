@@ -40,13 +40,13 @@ func runCmd() *cobra.Command {
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
 			// I still need to figure out how to instanciate the correct reporter based on the flag
-			stdoutReport := reporter.StdoutReport{Responses: responses}
-			stdoutReport.Report()
+			TXTReport := reporter.TXTReport{Responses: responses}
+			TXTReport.Report()
 
 			csvReport := reporter.CsvReport{Responses: responses}
 			csvReport.Report()
 
-			jReport := reporter.JSONReport{Results: responses}
+			jReport := reporter.JSONReport{Responses: responses}
 			jReport.Report()
 
 			fmt.Println("Done!")
