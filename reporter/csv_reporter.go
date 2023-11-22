@@ -7,7 +7,7 @@ import (
 )
 
 type CsvReport struct {
-	Responses []swarm.Response
+	Responses []swarm.HTTPResponse
 }
 
 func (cR CsvReport) Report() {

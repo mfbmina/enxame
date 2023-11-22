@@ -17,7 +17,7 @@ func TestCsvReportWhenResponsesAreNil(t *testing.T) {
 }
 
 func TestCsvReportWhenResponsesAreEmpty(t *testing.T) {
-	r := CsvReport{Responses: []swarm.Response{}}
+	r := CsvReport{Responses: []swarm.HTTPResponse{}}
 	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n"
 
 	output := captureOutput(func() { r.Report() })
@@ -26,7 +26,7 @@ func TestCsvReportWhenResponsesAreEmpty(t *testing.T) {
 
 func TestCsvReportWhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := CsvReport{Responses: []swarm.Response{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	r := CsvReport{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
 	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n200,1ms,/users\n"
 
 	output := captureOutput(func() { r.Report() })

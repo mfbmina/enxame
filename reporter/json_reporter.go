@@ -8,7 +8,7 @@ import (
 )
 
 type JSONReport struct {
-	Results []swarm.Response `json:"results"`
+	Results []swarm.HTTPResponse `json:"results"`
 }
 
 func (cR JSONReport) Report() {

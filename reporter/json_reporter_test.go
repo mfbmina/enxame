@@ -17,7 +17,7 @@ func TestJSONReportWhenResponsesAreNil(t *testing.T) {
 }
 
 func TestJSONReportWhenResponsesAreEmpty(t *testing.T) {
-	r := JSONReport{Results: []swarm.Response{}}
+	r := JSONReport{Results: []swarm.HTTPResponse{}}
 	expected := "Reporting results as JSON...\n-----------------------------\n[]\n"
 
 	output := captureOutput(func() { r.Report() })
@@ -26,7 +26,7 @@ func TestJSONReportWhenResponsesAreEmpty(t *testing.T) {
 
 func TestJSONReportWhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := JSONReport{Results: []swarm.Response{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	r := JSONReport{Results: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
 	expected := "Reporting results as JSON...\n-----------------------------\n[{\"status_code\":200,\"time\":1000000,\"path\":\"/users\"}]\n"
 
 	output := captureOutput(func() { r.Report() })

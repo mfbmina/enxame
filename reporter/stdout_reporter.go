@@ -7,7 +7,7 @@ import (
 )
 
 type StdoutReport struct {
-	Responses []swarm.Response
+	Responses []swarm.HTTPResponse
 }
 
 func (sR StdoutReport) Report() {

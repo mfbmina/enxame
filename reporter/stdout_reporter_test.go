@@ -17,7 +17,7 @@ func TestStdoutReportWhenResponsesAreNil(t *testing.T) {
 }
 
 func TestStdoutReportWhenResponsesAreEmpty(t *testing.T) {
-	r := StdoutReport{Responses: []swarm.Response{}}
+	r := StdoutReport{Responses: []swarm.HTTPResponse{}}
 	expected := "Reporting results to stdout...\n-----------------------------\n-----------------------------\n"
 
 	output := captureOutput(func() { r.Report() })
@@ -26,7 +26,7 @@ func TestStdoutReportWhenResponsesAreEmpty(t *testing.T) {
 
 func TestStdoutReportWhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := StdoutReport{Responses: []swarm.Response{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	r := StdoutReport{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
 	expected := "Reporting results to stdout...\n-----------------------------\n200 1ms /users\n-----------------------------\n"
 
 	output := captureOutput(func() { r.Report() })
