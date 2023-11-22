@@ -3,7 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/mfbmina/enxame/lib"
+	"github.com/mfbmina/enxame/lib/reporter"
+	"github.com/mfbmina/enxame/lib/swarm"
 	"github.com/spf13/cobra"
 )
 
@@ -36,10 +37,14 @@ func runCmd() *cobra.Command {
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Swarming", args[0], "...")
+			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
-			for _, r := range lib.Swarm(args[0], requestsPerUser, users) {
-				fmt.Println(r.StatusCode, r.Time, r.Path)
-			}
+			// I still need to figure out how to instanciate the correct reporter based on the flag
+			stdoutReport := reporter.StdoutReport{Responses: responses}
+			stdoutReport.Report()
+
+			csvReport := reporter.CsvReport{Responses: responses}
+			csvReport.Report()
 
 			fmt.Println("Done!")
 		},

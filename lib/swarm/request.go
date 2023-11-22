@@ -1,4 +1,4 @@
-package lib
+package swarm
 
 import (
 	"net/http"
