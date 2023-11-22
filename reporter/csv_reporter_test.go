@@ -9,26 +9,26 @@ import (
 )
 
 func TestCsvReportWhenResponsesAreNil(t *testing.T) {
-	sR := CsvReport{}
+	r := CsvReport{}
 	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n"
 
-	output := captureOutput(func() { sR.Report() })
+	output := captureOutput(func() { r.Report() })
 	assert.Equal(t, expected, output)
 }
 
 func TestCsvReportWhenResponsesAreEmpty(t *testing.T) {
-	sR := CsvReport{Responses: []swarm.Response{}}
+	r := CsvReport{Responses: []swarm.Response{}}
 	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n"
 
-	output := captureOutput(func() { sR.Report() })
+	output := captureOutput(func() { r.Report() })
 	assert.Equal(t, expected, output)
 }
 
 func TestCsvReportWhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	sR := CsvReport{Responses: []swarm.Response{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	r := CsvReport{Responses: []swarm.Response{{StatusCode: 200, Time: duration, Path: "/users"}}}
 	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n200,1ms,/users\n"
 
-	output := captureOutput(func() { sR.Report() })
+	output := captureOutput(func() { r.Report() })
 	assert.Equal(t, expected, output)
 }
