@@ -46,6 +46,9 @@ func runCmd() *cobra.Command {
 			csvReport := reporter.CsvReport{Responses: responses}
 			csvReport.Report()
 
+			jReport := reporter.JSONReport{Results: responses}
+			jReport.Report()
+
 			fmt.Println("Done!")
 		},
 	}

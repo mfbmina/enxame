@@ -6,9 +6,9 @@ import (
 )
 
 type Response struct {
-	StatusCode int
-	Time       time.Duration
-	Path       string
+	StatusCode int           `json:"status_code"`
+	Time       time.Duration `json:"time"`
+	Path       string        `json:"path"`
 }
 
 func Swarm(path string, requestsPerUser int, concurrentUsers int) []Response {
