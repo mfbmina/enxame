@@ -36,7 +36,8 @@ func runCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "run",
 		Short: "Run a test",
-		Long:  "",
+		Long:  "Run a test against the given URI",
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Swarming", args[0], "...")
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
