@@ -2,9 +2,6 @@ coverage:
   range: 60..80
   round: down
   precision: 2
-  require_ci_to_pass: yes
-  notify:
-    wait_for_ci: yes
   status:
     project:
       default:
@@ -18,3 +15,8 @@ coverage:
         threshold: 5%
         branches:
           - main
+
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
