@@ -5,13 +5,14 @@ coverage:
   status:
     project:
       default:
-        target: auto
-        threshold: 5%
-        branches:
-          - main
+        target: 90
+        threshold: 0%
     patch:
       default:
         target: auto
         threshold: 5%
-        branches:
-          - main
+
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
