@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/mfbmina/enxame/graph/badge.svg?token=NQJ4SCDISO)](https://codecov.io/gh/mfbmina/enxame)
 # enxame
 `Enxame` is an HTTP load tester and benchmarking utility made in Go.
 
