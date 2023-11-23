@@ -3,10 +3,12 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/mfbmina/enxame/lib"
+	"github.com/mfbmina/enxame/reporter"
+	"github.com/mfbmina/enxame/swarm"
 	"github.com/spf13/cobra"
 )
 
+var format string
 var requestsPerUser int
 var users int
 
@@ -26,6 +28,7 @@ func init() {
 	runCmd := runCmd()
 	runCmd.Flags().IntVarP(&requestsPerUser, "requests_per_user", "r", 5, "Max number of requests per user")
 	runCmd.Flags().IntVarP(&users, "users", "u", 10, "Max number of concurrent users")
+	runCmd.Flags().StringVarP(&format, "format", "f", "txt", "The report format (txt, csv, json)")
 	rootCmd.AddCommand(runCmd)
 }
 
@@ -36,10 +39,10 @@ func runCmd() *cobra.Command {
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Swarming", args[0], "...")
+			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
-			for _, r := range lib.Swarm(args[0], requestsPerUser, users) {
-				fmt.Println(r.StatusCode, r.Time, r.Path)
-			}
+			r := reporter.NewReporter(format, responses)
+			r.Report()
 
 			fmt.Println("Done!")
 		},
