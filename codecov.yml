@@ -5,7 +5,13 @@ coverage:
   status:
     project:
       default:
-        target: 90
+        target: auto
+        threshold: 5%
+        branches:
+          - main
+    patch:
+      default:
+        target: auto
         threshold: 5%
         branches:
           - main
