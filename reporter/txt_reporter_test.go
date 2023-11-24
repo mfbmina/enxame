@@ -8,27 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTXTReportWhenResponsesAreNil(t *testing.T) {
-	r := TXTReport{}
-	expected := "Reporting results to stdout...\n-----------------------------\n-----------------------------\n"
+func Test_TXTReporter_Report_WhenResponsesIsNil(t *testing.T) {
+	r := TXTReporter{}
+	expected := ""
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }
 
-func TestTXTReportWhenResponsesAreEmpty(t *testing.T) {
-	r := TXTReport{Responses: []swarm.HTTPResponse{}}
-	expected := "Reporting results to stdout...\n-----------------------------\n-----------------------------\n"
+func Test_TXTReporter_Report_WhenResponsesIsEmpty(t *testing.T) {
+	r := TXTReporter{Responses: []swarm.HTTPResponse{}}
+	expected := ""
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }
 
-func TestTXTReportWhenResponsesExists(t *testing.T) {
+func Test_TXTReporter_Report_WhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := TXTReport{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
-	expected := "Reporting results to stdout...\n-----------------------------\n200 1ms /users\n-----------------------------\n"
+	r := TXTReporter{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	expected := "200 1ms /users\n"
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }

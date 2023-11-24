@@ -1,21 +1,49 @@
 package reporter
 
 import (
+	"fmt"
+
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type Reporter interface {
-	createReport() string
-	WriteToStdout()
+type Report struct {
+	Output    string
+	Reporter  Reporter
+	Responses []swarm.HTTPResponse
+	Type      string
 }
 
-func NewReporter(reportType string, responses []swarm.HTTPResponse) Reporter {
+type Reporter interface {
+	Report() string
+}
+
+func NewReporter(reportType, output string, responses []swarm.HTTPResponse) Report {
+	r := Report{Output: output, Responses: responses, Type: reportType}
 	switch reportType {
-	case "csv":
-		return CSVReport{Responses: responses}
 	case "json":
-		return JSONReport{Responses: responses}
+		r.Reporter = JSONReporter{Responses: responses}
+	case "csv":
+		r.Reporter = CSVReporter{Responses: responses}
 	default:
-		return TXTReport{Responses: responses}
+		r.Reporter = TXTReporter{Responses: responses}
 	}
+
+	return r
+}
+
+func (r Report) Report() {
+	if r.Output == "" {
+		r.writeToStdout()
+	} else {
+		r.writeToFile()
+	}
+}
+
+func (r Report) writeToStdout() {
+	fmt.Printf("Reporting results as %s...\n", r.Type)
+	fmt.Println("------------------------------")
+	fmt.Println(r.Reporter.Report())
+}
+
+func (r Report) writeToFile() {
 }

@@ -8,27 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCSVReportWhenResponsesAreNil(t *testing.T) {
-	r := CSVReport{}
-	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n"
+func Test_CSVReporter_WhenResponsesAreNil(t *testing.T) {
+	r := CSVReporter{}
+	expected := "status_code,time,path"
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }
 
-func TestCSVReportWhenResponsesAreEmpty(t *testing.T) {
-	r := CSVReport{Responses: []swarm.HTTPResponse{}}
-	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n"
+func Test_CSVReporter_WhenResponsesAreEmpty(t *testing.T) {
+	r := CSVReporter{Responses: []swarm.HTTPResponse{}}
+	expected := "status_code,time,path"
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }
 
-func TestCSVReportWhenResponsesExists(t *testing.T) {
+func Test_CSVReporter_WhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := CSVReport{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
-	expected := "Reporting results as csv...\n-----------------------------\nstatus_code,time,path\n200,1ms,/users\n"
+	r := CSVReporter{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
+	expected := "status_code,time,path\n200,1ms,/users"
 
-	output := captureOutput(func() { r.WriteToStdout() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report())
 }
