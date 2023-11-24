@@ -11,14 +11,19 @@ type JSONReport struct {
 	Responses []swarm.HTTPResponse `json:"results"`
 }
 
-func (r JSONReport) Report() {
+func (r JSONReport) WriteToStdout() {
 	fmt.Println("Reporting results as JSON...")
 	fmt.Println("-----------------------------")
+
+	fmt.Println(r.createReport())
+}
+
+func (r JSONReport) createReport() string {
 	j, err := json.Marshal(r.Responses)
 	if err != nil {
 		fmt.Println(err)
-		return
+		return "malformed json"
 	}
 
-	fmt.Println(string(j))
+	return string(j)
 }

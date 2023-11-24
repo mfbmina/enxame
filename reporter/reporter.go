@@ -1,9 +1,12 @@
 package reporter
 
-import "github.com/mfbmina/enxame/swarm"
+import (
+	"github.com/mfbmina/enxame/swarm"
+)
 
 type Reporter interface {
-	Report()
+	createReport() string
+	WriteToStdout()
 }
 
 func NewReporter(reportType string, responses []swarm.HTTPResponse) Reporter {
