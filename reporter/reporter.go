@@ -15,18 +15,18 @@ type Report struct {
 }
 
 type Reporter interface {
-	Report() string
+	Report([]swarm.HTTPResponse) string
 }
 
 func NewReporter(reportType, output string, responses []swarm.HTTPResponse) Report {
 	r := Report{Output: output, Responses: responses, Type: reportType}
 	switch reportType {
 	case "json":
-		r.Reporter = JSONReporter{Responses: responses}
+		r.Reporter = JSONReporter{}
 	case "csv":
-		r.Reporter = CSVReporter{Responses: responses}
+		r.Reporter = CSVReporter{}
 	default:
-		r.Reporter = TXTReporter{Responses: responses}
+		r.Reporter = TXTReporter{}
 	}
 
 	return r
@@ -43,7 +43,7 @@ func (r Report) Report() {
 
 func (r Report) writeToStdout() {
 	fmt.Println("------------------------------")
-	fmt.Println(r.Reporter.Report())
+	fmt.Println(r.Reporter.Report(r.Responses))
 }
 
 func (r Report) writeToFile() {
@@ -57,7 +57,7 @@ func (r Report) writeToFile() {
 
 	defer f.Close()
 
-	_, err = f.WriteString(r.Reporter.Report())
+	_, err = f.WriteString(r.Reporter.Report(r.Responses))
 	if err != nil {
 		// TODO: handle error
 		fmt.Printf("Error writing to file %s: %s\n", name, err.Error())

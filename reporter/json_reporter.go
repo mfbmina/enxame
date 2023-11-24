@@ -6,12 +6,10 @@ import (
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type JSONReporter struct {
-	Responses []swarm.HTTPResponse `json:"results"`
-}
+type JSONReporter struct{}
 
-func (r JSONReporter) Report() string {
-	j, err := json.Marshal(r.Responses)
+func (r JSONReporter) Report(responses []swarm.HTTPResponse) string {
+	j, err := json.Marshal(responses)
 	if err != nil {
 		// TODO: handle error better
 		return err.Error()
