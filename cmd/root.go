@@ -42,7 +42,7 @@ func runCmd() *cobra.Command {
 			fmt.Println("Swarming", args[0], "...")
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
-			r := reporter.NewReporter(format, "", responses)
+			r := reporter.NewReporter(format, "test", responses)
 			r.Report()
 
 			fmt.Println("Done!")

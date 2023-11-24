@@ -13,8 +13,8 @@ type JSONReporter struct {
 func (r JSONReporter) Report() string {
 	j, err := json.Marshal(r.Responses)
 	if err != nil {
-		// TODO: handle error
-		return "malformed json"
+		// TODO: handle error better
+		return err.Error()
 	}
 
 	return string(j)
