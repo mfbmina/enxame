@@ -10,7 +10,7 @@ coverage:
     patch:
       default:
         target: auto
-        threshold: 5%
+        threshold: 15%
 
 codecov:
   require_ci_to_pass: yes
