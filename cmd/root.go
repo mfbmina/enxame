@@ -9,6 +9,7 @@ import (
 )
 
 var format string
+var output string
 var requestsPerUser int
 var users int
 
@@ -25,15 +26,11 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize()
 
-	runCmd := runCmd()
-	runCmd.Flags().IntVarP(&requestsPerUser, "requests_per_user", "r", 5, "Max number of requests per user")
-	runCmd.Flags().IntVarP(&users, "users", "u", 10, "Max number of concurrent users")
-	runCmd.Flags().StringVarP(&format, "format", "f", "txt", "The report format (txt, csv, json)")
-	rootCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(runCmd())
 }
 
 func runCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "run",
 		Short: "Run a test",
 		Long:  "Run a test against the given URI",
@@ -42,10 +39,15 @@ func runCmd() *cobra.Command {
 			fmt.Println("Swarming", args[0], "...")
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
-			r := reporter.NewReporter(format, responses)
+			r := reporter.NewReporter(format, output, responses)
 			r.Report()
-
-			fmt.Println("Done!")
 		},
 	}
+
+	cmd.Flags().IntVarP(&requestsPerUser, "requests_per_user", "r", 5, "Max number of requests per user")
+	cmd.Flags().IntVarP(&users, "users", "u", 10, "Max number of concurrent users")
+	cmd.Flags().StringVarP(&format, "format", "f", "txt", "The report format (txt, csv, json)")
+	cmd.Flags().StringVarP(&output, "output", "o", "", "The output file name (extension will be appended automatically)")
+
+	return cmd
 }

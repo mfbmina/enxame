@@ -6,15 +6,14 @@ import (
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type TXTReport struct {
+type TXTReporter struct {
 	Responses []swarm.HTTPResponse
 }
 
-func (r TXTReport) Report() {
-	fmt.Println("Reporting results to stdout...")
-	fmt.Println("-----------------------------")
-	for _, r := range r.Responses {
-		fmt.Println(r.StatusCode, r.Time, r.Path)
+func (r TXTReporter) Report(responses []swarm.HTTPResponse) string {
+	report := ""
+	for _, r := range responses {
+		report += fmt.Sprintf("%d %s %s\n", r.StatusCode, r.Time, r.Path)
 	}
-	fmt.Println("-----------------------------")
+	return report
 }

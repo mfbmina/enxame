@@ -6,15 +6,14 @@ import (
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type CSVReport struct {
-	Responses []swarm.HTTPResponse
-}
+const CSV_HEADERS = "status_code,time,path"
 
-func (r CSVReport) Report() {
-	fmt.Println("Reporting results as csv...")
-	fmt.Println("-----------------------------")
-	fmt.Println("status_code,time,path")
-	for _, r := range r.Responses {
-		fmt.Printf("%d,%s,%s\n", r.StatusCode, r.Time, r.Path)
+type CSVReporter struct{}
+
+func (r CSVReporter) Report(responses []swarm.HTTPResponse) string {
+	report := CSV_HEADERS
+	for _, r := range responses {
+		report += fmt.Sprintf("\n%d,%s,%s", r.StatusCode, r.Time, r.Path)
 	}
+	return report
 }

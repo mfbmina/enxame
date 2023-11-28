@@ -8,27 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestJSONReportWhenResponsesAreNil(t *testing.T) {
-	r := JSONReport{}
-	expected := "Reporting results as JSON...\n-----------------------------\nnull\n"
+func Test_JSONReporter_WhenResponsesAreNil(t *testing.T) {
+	r := JSONReporter{}
+	expected := "null"
 
-	output := captureOutput(func() { r.Report() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report(nil))
 }
 
-func TestJSONReportWhenResponsesAreEmpty(t *testing.T) {
-	r := JSONReport{Responses: []swarm.HTTPResponse{}}
-	expected := "Reporting results as JSON...\n-----------------------------\n[]\n"
+func Test_JSONReporter_WhenResponsesAreEmpty(t *testing.T) {
+	r := JSONReporter{}
+	expected := "[]"
 
-	output := captureOutput(func() { r.Report() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{}))
 }
 
-func TestJSONReportWhenResponsesExists(t *testing.T) {
+func Test_JSONReporter_WhenResponsesExists(t *testing.T) {
 	duration, _ := time.ParseDuration("1ms")
-	r := JSONReport{Responses: []swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}}
-	expected := "Reporting results as JSON...\n-----------------------------\n[{\"status_code\":200,\"time\":1000000,\"path\":\"/users\"}]\n"
+	r := JSONReporter{}
+	expected := "[{\"status_code\":200,\"time\":1000000,\"path\":\"/users\"}]"
 
-	output := captureOutput(func() { r.Report() })
-	assert.Equal(t, expected, output)
+	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}))
 }

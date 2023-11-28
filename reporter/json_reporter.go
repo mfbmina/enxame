@@ -2,23 +2,18 @@ package reporter
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/mfbmina/enxame/swarm"
 )
 
-type JSONReport struct {
-	Responses []swarm.HTTPResponse `json:"results"`
-}
+type JSONReporter struct{}
 
-func (r JSONReport) Report() {
-	fmt.Println("Reporting results as JSON...")
-	fmt.Println("-----------------------------")
-	j, err := json.Marshal(r.Responses)
+func (r JSONReporter) Report(responses []swarm.HTTPResponse) string {
+	j, err := json.Marshal(responses)
 	if err != nil {
-		fmt.Println(err)
-		return
+		// TODO: handle error better
+		return err.Error()
 	}
 
-	fmt.Println(string(j))
+	return string(j)
 }
