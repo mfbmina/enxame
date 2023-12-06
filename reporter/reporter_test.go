@@ -38,19 +38,18 @@ func Test_Report_WhenOutputIsEmpty(t *testing.T) {
 
 	o := captureOutput(func() { r.Report() })
 
-	assert.Equal(t, "Reporting results as txt...\n------------------------------\n\n", o)
+	assert.Equal(t, "\n", o)
 }
 
 func Test_Report_WhenOutputIsNotEmpty(t *testing.T) {
 	defer os.Remove("output.csv")
 
 	r := NewReporter("csv", "output", []swarm.HTTPResponse{})
-	stdoutResponse := captureOutput(func() { r.Report() })
+	r.Report()
 
 	content, err := os.ReadFile("output.csv")
 	assert.Nil(t, err)
 	assert.Equal(t, "status_code,time,path", string(content))
-	assert.Equal(t, "Reporting results as csv...\nReport saved to output.csv successfully!\n", stdoutResponse)
 
 	defer os.Remove("output.csv")
 }

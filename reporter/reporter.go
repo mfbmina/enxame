@@ -33,43 +33,37 @@ func NewReporter(reportType, output string, responses []swarm.HTTPResponse) Repo
 }
 
 func (r Report) Report() error {
-	fmt.Printf("Reporting results as %s...\n", r.Type)
 	raw, err := r.Reporter.Report(r.Responses)
 	if err != nil {
-		return fmt.Errorf("Report.Report(): Error reporting results: %s\n", err.Error())
+		return fmt.Errorf("Report.Report(): Error formating results: %s\n", err.Error())
 	}
 
 	if r.Output == "" {
-		r.writeToStdout(raw)
-	} else {
-		r.writeToFile(raw)
+		fmt.Println(raw)
+		return nil
+	}
+
+	err = r.writeToFile(raw)
+	if err != nil {
+		return fmt.Errorf("Report.Report(): Error writing results to file: %s\n", err.Error())
 	}
 
 	return nil
 }
 
-func (r Report) writeToStdout(raw string) {
-	fmt.Println("------------------------------")
-	fmt.Println(raw)
-}
-
-func (r Report) writeToFile(raw string) {
+func (r Report) writeToFile(raw string) error {
 	name := fmt.Sprintf("%s.%s", r.Output, r.Type)
 	f, err := os.Create(name)
 	if err != nil {
-		// TODO: handle error better
-		fmt.Printf("Error creating file %s: %s\n", name, err.Error())
-		return
+		return fmt.Errorf("Report.writeToFile(): Error creating file: %s\n", err.Error())
 	}
 
 	defer f.Close()
 
 	_, err = f.WriteString(raw)
 	if err != nil {
-		// TODO: handle error
-		fmt.Printf("Error writing to file %s: %s\n", name, err.Error())
-		return
+		return fmt.Errorf("Report.writeToFile(): Error writing to file: %s\n", err.Error())
 	}
 
-	fmt.Println("Report saved to", name, "successfully!")
+	return nil
 }
