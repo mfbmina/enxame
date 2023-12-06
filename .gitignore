@@ -20,3 +20,9 @@ enxame
 
 # Go workspace file
 go.work
+
+# Files
+*.csv
+*.json
+*.log
+*.txt
