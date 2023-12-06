@@ -42,12 +42,13 @@ func runCmd() *cobra.Command {
 
 			fmt.Printf("Reporting results as %s...\n", format)
 			r := reporter.NewReporter(format, output, responses)
-			err := r.Report()
+			feedback, err := r.Report()
 			if err != nil {
 				sentry.CaptureException(err)
 				return
 			}
 
+			fmt.Println(feedback)
 			fmt.Println("Done!")
 		},
 	}

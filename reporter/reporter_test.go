@@ -1,7 +1,6 @@
 package reporter
 
 import (
-	"io"
 	"os"
 	"testing"
 
@@ -35,32 +34,23 @@ func Test_NewReport_WhenTypeIsRandom(t *testing.T) {
 
 func Test_Report_WhenOutputIsEmpty(t *testing.T) {
 	r := NewReporter("txt", "", []swarm.HTTPResponse{})
+	f, e := r.Report()
 
-	o := captureOutput(func() { r.Report() })
-
-	assert.Equal(t, "\n", o)
+	assert.Equal(t, "", f)
+	assert.Nil(t, e)
 }
 
 func Test_Report_WhenOutputIsNotEmpty(t *testing.T) {
 	defer os.Remove("output.csv")
 
 	r := NewReporter("csv", "output", []swarm.HTTPResponse{})
-	r.Report()
+	f, e := r.Report()
+	assert.Equal(t, "Report created at output.csv", f)
+	assert.Nil(t, e)
 
 	content, err := os.ReadFile("output.csv")
 	assert.Nil(t, err)
 	assert.Equal(t, "status_code,time,path", string(content))
 
 	defer os.Remove("output.csv")
-}
-
-func captureOutput(f func()) string {
-	orig := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
-	f()
-	os.Stdout = orig
-	w.Close()
-	out, _ := io.ReadAll(r)
-	return string(out)
 }
