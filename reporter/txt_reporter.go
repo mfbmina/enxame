@@ -10,10 +10,10 @@ type TXTReporter struct {
 	Responses []swarm.HTTPResponse
 }
 
-func (r TXTReporter) Report(responses []swarm.HTTPResponse) string {
+func (r TXTReporter) Report(responses []swarm.HTTPResponse) (string, error) {
 	report := ""
 	for _, r := range responses {
 		report += fmt.Sprintf("%d %s %s\n", r.StatusCode, r.Time, r.Path)
 	}
-	return report
+	return report, nil
 }
