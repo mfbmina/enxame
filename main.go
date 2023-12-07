@@ -12,7 +12,7 @@ import (
 func main() {
 	defer panicRecover()
 	viper.AutomaticEnv()
-	viper.SetDefault("SENTRY_DSN", "")
+	viper.SetDefault("SENTRY_DSN", "https://2ed32e0bcb336bf19065411bdbe0887f@o4506350446575616.ingest.sentry.io/4506350457847808")
 
 	sentry.Init(sentry.ClientOptions{
 		Dsn:              viper.Get("SENTRY_DSN").(string),

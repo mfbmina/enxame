@@ -5,7 +5,6 @@ go 1.21
 require (
 	github.com/getsentry/sentry-go v0.25.0
 	github.com/spf13/cobra v1.8.0
-	github.com/spf13/viper v1.18.0
 	github.com/steinfletcher/apitest v1.5.15
 	github.com/stretchr/testify v1.8.4
 )
