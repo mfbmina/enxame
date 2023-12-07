@@ -12,7 +12,6 @@ type JSONReporter struct{}
 func (r JSONReporter) Report(responses []swarm.HTTPResponse) (string, error) {
 	j, err := json.Marshal(responses)
 	if err != nil {
-		// TODO: handle error better
 		msg := fmt.Sprintf("JSONReporter.Report(): Error marshaling responses: %s\n", err.Error())
 		return "", fmt.Errorf(msg)
 	}
