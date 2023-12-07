@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/mfbmina/enxame/reporter"
 	"github.com/mfbmina/enxame/swarm"
 	"github.com/spf13/cobra"
@@ -39,8 +40,16 @@ func runCmd() *cobra.Command {
 			fmt.Println("Swarming", args[0], "...")
 			responses := swarm.Swarm(args[0], requestsPerUser, users)
 
+			fmt.Printf("Reporting results as %s...\n", format)
 			r := reporter.NewReporter(format, output, responses)
-			r.Report()
+			feedback, err := r.Report()
+			if err != nil {
+				sentry.CaptureException(err)
+				return
+			}
+
+			fmt.Println(feedback)
+			fmt.Println("Done!")
 		},
 	}
 

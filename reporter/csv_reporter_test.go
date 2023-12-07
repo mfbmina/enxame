@@ -12,14 +12,16 @@ func Test_CSVReporter_WhenResponsesAreNil(t *testing.T) {
 	r := CSVReporter{}
 	expected := "status_code,time,path"
 
-	assert.Equal(t, expected, r.Report(nil))
+	resp, _ := r.Report(nil)
+	assert.Equal(t, expected, resp)
 }
 
 func Test_CSVReporter_WhenResponsesAreEmpty(t *testing.T) {
 	r := CSVReporter{}
 	expected := "status_code,time,path"
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{}))
+	resp, _ := r.Report([]swarm.HTTPResponse{})
+	assert.Equal(t, expected, resp)
 }
 
 func Test_CSVReporter_WhenResponsesExists(t *testing.T) {
@@ -27,5 +29,6 @@ func Test_CSVReporter_WhenResponsesExists(t *testing.T) {
 	r := CSVReporter{}
 	expected := "status_code,time,path\n200,1ms,/users"
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}))
+	resp, _ := r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}})
+	assert.Equal(t, expected, resp)
 }

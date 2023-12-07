@@ -12,14 +12,16 @@ func Test_TXTReporter_Report_WhenResponsesIsNil(t *testing.T) {
 	r := TXTReporter{}
 	expected := ""
 
-	assert.Equal(t, expected, r.Report(nil))
+	resp, _ := r.Report(nil)
+	assert.Equal(t, expected, resp)
 }
 
 func Test_TXTReporter_Report_WhenResponsesIsEmpty(t *testing.T) {
 	r := TXTReporter{}
 	expected := ""
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{}))
+	resp, _ := r.Report([]swarm.HTTPResponse{})
+	assert.Equal(t, expected, resp)
 }
 
 func Test_TXTReporter_Report_WhenResponsesExists(t *testing.T) {
@@ -27,5 +29,6 @@ func Test_TXTReporter_Report_WhenResponsesExists(t *testing.T) {
 	r := TXTReporter{}
 	expected := "200 1ms /users\n"
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}))
+	resp, _ := r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}})
+	assert.Equal(t, expected, resp)
 }

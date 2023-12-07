@@ -30,3 +30,4 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SENTRY_DSN:   ${{ secrets.SENTRY_DSN }}

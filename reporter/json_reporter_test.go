@@ -12,14 +12,16 @@ func Test_JSONReporter_WhenResponsesAreNil(t *testing.T) {
 	r := JSONReporter{}
 	expected := "null"
 
-	assert.Equal(t, expected, r.Report(nil))
+	resp, _ := r.Report(nil)
+	assert.Equal(t, expected, resp)
 }
 
 func Test_JSONReporter_WhenResponsesAreEmpty(t *testing.T) {
 	r := JSONReporter{}
 	expected := "[]"
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{}))
+	resp, _ := r.Report([]swarm.HTTPResponse{})
+	assert.Equal(t, expected, resp)
 }
 
 func Test_JSONReporter_WhenResponsesExists(t *testing.T) {
@@ -27,5 +29,6 @@ func Test_JSONReporter_WhenResponsesExists(t *testing.T) {
 	r := JSONReporter{}
 	expected := "[{\"status_code\":200,\"time\":1000000,\"path\":\"/users\"}]"
 
-	assert.Equal(t, expected, r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}}))
+	resp, _ := r.Report([]swarm.HTTPResponse{{StatusCode: 200, Time: duration, Path: "/users"}})
+	assert.Equal(t, expected, resp)
 }

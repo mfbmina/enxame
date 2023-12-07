@@ -15,7 +15,7 @@ type Report struct {
 }
 
 type Reporter interface {
-	Report([]swarm.HTTPResponse) string
+	Report([]swarm.HTTPResponse) (string, error)
 }
 
 func NewReporter(reportType, output string, responses []swarm.HTTPResponse) Report {
@@ -32,37 +32,32 @@ func NewReporter(reportType, output string, responses []swarm.HTTPResponse) Repo
 	return r
 }
 
-func (r Report) Report() {
-	fmt.Printf("Reporting results as %s...\n", r.Type)
-	if r.Output == "" {
-		r.writeToStdout()
-	} else {
-		r.writeToFile()
+func (r Report) Report() (string, error) {
+	raw, err := r.Reporter.Report(r.Responses)
+	if err != nil {
+		return "", fmt.Errorf("Report.Report(): Error formating results: %s\n", err.Error())
 	}
+
+	if r.Output == "" {
+		return raw, nil
+	}
+
+	return r.writeToFile(raw)
 }
 
-func (r Report) writeToStdout() {
-	fmt.Println("------------------------------")
-	fmt.Println(r.Reporter.Report(r.Responses))
-}
-
-func (r Report) writeToFile() {
+func (r Report) writeToFile(raw string) (string, error) {
 	name := fmt.Sprintf("%s.%s", r.Output, r.Type)
 	f, err := os.Create(name)
 	if err != nil {
-		// TODO: handle error better
-		fmt.Printf("Error creating file %s: %s\n", name, err.Error())
-		return
+		return "", fmt.Errorf("Report.writeToFile(): Error creating file: %s\n", err.Error())
 	}
 
 	defer f.Close()
 
-	_, err = f.WriteString(r.Reporter.Report(r.Responses))
+	_, err = f.WriteString(raw)
 	if err != nil {
-		// TODO: handle error
-		fmt.Printf("Error writing to file %s: %s\n", name, err.Error())
-		return
+		return "", fmt.Errorf("Report.writeToFile(): Error writing to file: %s\n", err.Error())
 	}
 
-	fmt.Println("Report saved to", name, "successfully!")
+	return fmt.Sprintf("Report created at %s", name), nil
 }
