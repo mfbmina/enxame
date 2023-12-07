@@ -6,16 +6,19 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/mfbmina/enxame/cmd"
+	"github.com/spf13/viper"
 )
 
 func main() {
 	defer panicRecover()
+	viper.AutomaticEnv()
+	viper.SetDefault("SENTRY_DSN", "")
 
-	err := sentry.Init(sentry.ClientOptions{
-		Dsn:              "",
+	sentry.Init(sentry.ClientOptions{
+		Dsn:              viper.Get("SENTRY_DSN").(string),
 		TracesSampleRate: 1.0,
 	})
-	err = cmd.Execute()
+	err := cmd.Execute()
 	if err != nil {
 		sentry.CaptureException(err)
 	}
