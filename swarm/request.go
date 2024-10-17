@@ -11,33 +11,37 @@ type HTTPResponse struct {
 	Path       string        `json:"path"`
 }
 
-func Swarm(path string, requestsPerUser int, concurrentUsers int) []HTTPResponse {
+func Swarm(path, method string, requestsPerUser, concurrentUsers int) ([]HTTPResponse, error) {
 	totalRequests := requestsPerUser * concurrentUsers
 	channel := make(chan HTTPResponse, totalRequests)
 	responses := make([]HTTPResponse, totalRequests)
 
 	for i := 0; i < concurrentUsers; i++ {
-		go userRequests(path, requestsPerUser, channel)
+		req, _ := http.NewRequest(method, path, nil)
+		go userRequests(req, requestsPerUser, channel)
 	}
 
 	for i := 0; i < totalRequests; i++ {
 		responses[i] = <-channel
 	}
 
-	return responses
+	return responses, nil
 }
 
-func userRequests(path string, requestsPerUser int, channel chan HTTPResponse) {
+func userRequests(req *http.Request, requestsPerUser int, channel chan HTTPResponse) {
 	for i := 0; i < requestsPerUser; i++ {
 		startTime := time.Now()
-		resp, err := http.Get(path)
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+
 		elapsedTime := time.Since(startTime) / time.Millisecond
 
 		if err != nil {
-			channel <- HTTPResponse{StatusCode: 0, Path: path, Time: elapsedTime}
+			channel <- HTTPResponse{StatusCode: 0, Path: req.URL.String(), Time: elapsedTime}
 			continue
 		}
 
-		channel <- HTTPResponse{StatusCode: resp.StatusCode, Path: path, Time: elapsedTime}
+		channel <- HTTPResponse{StatusCode: resp.StatusCode, Path: req.URL.String(), Time: elapsedTime}
 	}
 }
